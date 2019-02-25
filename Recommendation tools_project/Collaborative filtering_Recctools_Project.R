@@ -283,35 +283,27 @@ avg(ev1)
 
 
 #######################Cluster based collaborative filtering ###########################
-#Cluster based collaborative filtering using functions 
-
-Prediction_cluster = ClusterBasedCF(user_artists_transform, 3, 150, 75, onlyNew=TRUE)
-Prediction_cluster_prediction = as.data.frame(Prediction_cluster$prediction)
-Prediction_cluster_topN = as.data.frame(Prediction_cluster$topN)
-length(Prediction_cluster$topN)
-length(Prediction_cluster$prediction)
-
-write.csv(Prediction_cluster_prediction,file="Prediction_cluster_prediction.csv")
-write.csv(Prediction_cluster_topN,file="Prediction_cluster_topN.csv")
 
 #Cluster based collaborative filtering on the matrix
 Prediction_cluster_matrix = ClusterBasedCF(user_artists_transform_matrix, 3, 150, 75, onlyNew=TRUE)
-Prediction_cluster_prediction_matrix = as.data.frame(Prediction_cluster$prediction)
-Prediction_cluster_topN_matrix = as.data.frame(Prediction_cluster$topN)
+Prediction_cluster_prediction_matrix = as.data.frame(Prediction_cluster_matrix$prediction)
+Prediction_cluster_topN_matrix = as.data.frame(Prediction_cluster_matrix$topN)
+Prediction_cluster_topN_matrix
+
+Prediction_cluster_prediction_matrixtest = subset(Prediction_cluster_prediction_matrix, row.names(Prediction_cluster_prediction_matrix) %in% row.names(test_data))
+
+dim(test_data)
+row.names(test_data)
+row.names(Prediction_cluster_prediction_matrix)
 
 
 #Evaluation metrics- Clusterbased
-#Prediction accuracy1
-
-RSME(Prediction_cluster$prediction,user_artists_transform)
-MAE(Prediction_cluster$prediction,user_artists_transform)
 
 #Prediction accuracy2
-RSME(Prediction_cluster_matrix$prediction,user_artists_transform_matrix)
-MAE(Prediction_cluster_matrix$prediction,user_artists_transform_matrix)
+RSME(Prediction_cluster_prediction_matrixtest,test_data1)
+
 
 #Classfication accuracy
-Classification(Prediction_cluster_prediction,user_artists_transform,threshold = 10,TopN = 10)
+Classification(Prediction_cluster_prediction_matrixtest,test_data1,threshold = 10,TopN = NA)
 
-dim(Prediction_cluster_matrix$prediction)
-dim(user_artists_transform)
+
